@@ -1,0 +1,14 @@
+# Build artifacts
+build/
+bin/
+*.o
+*.a
+*.so
+*.dylib
+*.dll
+
+# Temporary and editor files
+*~
+*.swp
+*.core
+.DS_Store
