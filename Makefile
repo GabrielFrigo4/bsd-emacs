@@ -20,7 +20,7 @@ CPPFLAGS     = -I$(INC_DIR) -D_DEFAULT_SOURCE -D_POSIX_C_SOURCE=202405L -D_FORTI
 LDFLAGS      = -flto -pie -Wl,-z,relro,-z,now
 
 LIBS_SDL     = -lSDL3
-LIBS_LUA     = -llua5.5 2>/dev/null || -llua5.4 || -llua
+LIBS_LUA     = -llua
 
 TARGET       = $(BIN_DIR)/bsd-emacs
 
@@ -58,7 +58,7 @@ build:
 	_sources=$$(find $(SRC_DIR) -name "*.c" 2> "/dev/null" || true); \
 	if [ -n "$$_sources" ]; then \
 		echo "⚙️  Compilando núcleo C23 do BSD Emacs..."; \
-		$(CC) $(CFLAGS) $(WFLAGS) $(CPPFLAGS) $$_sources $(LDFLAGS) $(LIBS_SDL) $(LIBS_LUA) -o $(TARGET) 2>/dev/null || \
+		$(CC) $(CFLAGS) $(WFLAGS) $(CPPFLAGS) $$_sources $(LDFLAGS) $(LIBS_SDL) $(LIBS_LUA) -o $(TARGET) 2> "/dev/null" || \
 		echo "ℹ️  Dependências SDL3/Lua em processo de linkagem no host atual."; \
 		echo "  ✅ Binário $(TARGET) atualizado!"; \
 	else \
@@ -88,7 +88,7 @@ format: clang-format prettier
 clang-format:
 	echo "🎨 Formatando arquivos C com clang-format..."
 	if command -v clang-format > "/dev/null" 2>&1; then \
-		find . -type f \( -name "*.c" -o -name "*.h" \) -not -path "*/.*" -exec clang-format -i {} + 2>/dev/null || true; \
+		find . -type f \( -name "*.c" -o -name "*.h" \) -not -path "*/.*" -exec clang-format -i {} + 2> "/dev/null" || true; \
 	fi
 
 prettier:
