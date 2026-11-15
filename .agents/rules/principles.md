@@ -1,28 +1,40 @@
-# Regras Canônicas de Domínio & Regras Locais: BSD Emacs
-
-> Regras de governança estrita e restrições de arquitetura para agentes de IA operando no repositório **BSD Emacs** (`Personal/Systems/BSD Emacs`).
-
+---
+description: Regra canônica com os 22 princípios soberanos de engenharia e diretrizes operacionais.
+globs: "**/*"
+always_on: true
 ---
 
-## 1. Stack Tecnológica Soberana
+# 📜 Princípios Soberanos de Engenharia & Diretrizes Canônicas
 
-1. **Kernel em C23:** O motor central do editor é desenvolvido estritamente em **C23** (`-std=c23`), gerenciando eventos, a camada de janelas SDL3, o pipeline gráfico de GPU e o runtime Lua.
-2. **Camada Gráfica SDL_GPU:** Em vez de OpenGL clássico ou wrappers pesados, o subsistema de renderização utiliza a API moderna **SDL_GPU** (renderizando sobre Vulkan no Linux/FreeBSD, DX12 no Windows e Metal no macOS).
-3. **Áudio Nativo com SDL_Sound:** Decodificação e streaming de múltiplos formatos de som sem travar a thread de display.
-4. **Userland Autoprogramável em Lua 5.5+:** Toda a interface do usuário, divisão de janelas (_splits_), temas e extensões são implementados em scripts Lua através de bindings diretos e rápidos.
+Todo trabalho de engenharia e desenvolvimento neste repositório obedece rigorosamente aos 22 Princípios de Engenharia (17 Princípios UNIX de Eric S. Raymond + 5 Regras de Soberania & Antifragilidade).
 
----
+## 🏛️ Os 22 Princípios de Design
 
-## 2. A Filosofia da Ferramenta Hacker de Display
+1. **Modularidade:** Partes simples conectadas por interfaces limpas.
+2. **Clareza:** Clareza é melhor que esperteza; legibilidade sobre truques crípticos.
+3. **Composição:** Projete programas para serem conectados a outros programas.
+4. **Separação:** Separe política do mecanismo; separe o motor da interface.
+5. **Simplicidade:** Projete para a simplicidade; adicione complexidade apenas onde estritamente necessário.
+6. **Parcimônia:** Escreva código grande apenas quando demonstrado que nada menor resolverá.
+7. **Transparência:** Projete para visibilidade facilitando inspeção e auditoria.
+8. **Robustez:** Robustez advém da simplicidade e da validação defensiva de invariantes.
+9. **Representação:** Dobre conhecimento em dados/estruturas antes de espalhar lógica condicional.
+10. **Menor Espanto:** Siga sempre as convenções canônicas menos surpreendentes da plataforma.
+11. **Silêncio:** Programas devem executar quietos no sucesso, reportando apenas falhas reais.
+12. **Reparo:** Falhe ruidosamente e o mais rápido possível (fail-fast).
+13. **Economia:** Economize o tempo humano de engenharia em preferência ao tempo de máquina.
+14. **Geração:** Evite código mecânico e repetitivo; automatize scaffolds e templates.
+15. **Otimização:** Meça antes de otimizar; nunca sacrifique clareza por micro-otimizações precoces.
+16. **Diversidade:** Desconfie de visões absolutistas; forneça interoperabilidade e portabilidade.
+17. **Extensibilidade:** Projete para o futuro reconhecendo que os requisitos irão evoluir.
+18. **Soberania do Usuário:** Infraestrutura e dados pertencem ao criador; repatrie dependências de nuvem e serviços proprietários.
+19. **Autonomia Reentrante:** Toda operação deve ser idempotente, auto-recuperável e executável repetidamente sem efeitos colaterais.
+20. **Hermetismo de Produção:** Deleção de `.agents/` e governança de IA não interfere em nenhum artefato de build ou execução de produção (`rm -rf .agents`).
+21. **Desacoplamento Dev-Hub:** O código canônico reside na bancada de desenvolvimento; instalações em produção são atualizadas via pull limpo.
+22. **Antifragilidade & Resiliência Ativa:** O sistema se fortalece sob estresse e perturbação com auto-cura em tempo de voo e fallback dinâmico em cascata.
 
-1. **Mais Hacker Display do que SO Monolítico:** A prioridade é permitir customização extrema, GPGPU, som, desenho livre e a capacidade de usar uma janela do BSD Emacs como display para rodar vídeos, simulações ou jogos sem precisar de hacks no sistema operacional.
-2. **Desacoplamento Kernel / Userland:** O Kernel nunca embute regras de estilo ou atalhos hardcoded. Ele apenas provê primitivas e superfícies aceleradas por GPU para o Userland comandar.
-3. **Hierarquia de Diretórios do FreeBSD:** A árvore de configurações reproduz os domínios do FreeBSD: `/etc` (imutável), `/bin` e `/lib` (Userland base), `/usr/local` (feudo do usuário e `init.lua`), `/dev` (dispositivos de I/O), `/var` (caches voláteis).
+## 🎯 Invariantes Operacionais
 
----
-
-## 3. Invariantes de Engenharia
-
-1. **Invariante Hermetismo de Produção:** Nenhuma linha de código ou script de produção pode depender de `.agents/` ou skills.
-2. **Invariante Out-of-the-Box:** Permissões no Git Index canônicas (`0755` para scripts/hooks, `0644` para fontes e documentação).
-3. **Sem Emojis em Títulos:** A documentação técnica prioriza badges vetoriais (SVG shields) e diagramação limpa.
+- **Makefile Silencioso:** Todo repositório possui `Makefile` POSIX `.SILENT:` com help colorido interativo (`make help`).
+- **Githooks Autônomos:** Pre-commit e commit-msg em POSIX `sh` sem dependências globais externas.
+- **Permissões Canônicas:** `chmod 0755` para `.githooks/*` e scripts/entrypoints executáveis iniciados com shebang `#!`; `chmod 0644` para bibliotecas `sourced`, arquivos de configuração, código-fonte e documentação.
